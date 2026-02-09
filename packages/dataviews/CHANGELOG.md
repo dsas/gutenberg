@@ -4,6 +4,7 @@
 
 ### Breaking Changes
 
+- Upgrade React to v19 ([#61521](https://github.com/WordPress/gutenberg/pull/61521)).
 - DataViews: Use intersectionObserver to improve performance by unloading invisible items. Change how infinite scroll is enabled to require only 2 view properties: `infiniteScrollEnabled` and `startPosition`. [#74378](https://github.com/WordPress/gutenberg/pull/74378)
 
 ## 13.1.0 (2026-03-18)

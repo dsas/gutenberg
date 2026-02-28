@@ -1075,6 +1075,7 @@ export default function Image( {
 				{ ( temporaryURL || isSideloading ) && (
 					<UploadingOverlay
 						url={ temporaryURL }
+						attachmentId={ id }
 						onCancel={ () => onSelectImage( undefined ) }
 					/>
 				) }

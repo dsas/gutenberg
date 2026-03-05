@@ -198,6 +198,6 @@
 	}
 
 	&:not(.is-empty) {
-		cursor: pointer;
+		cursor: var(--wpds-cursor-control);
 	}
 }

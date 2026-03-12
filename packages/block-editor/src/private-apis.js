@@ -73,6 +73,7 @@ import {
 	isHashLink,
 	isRelativePath,
 } from './components/link-control/is-url-like';
+import { BlockCardControlsFill } from './components/block-card';
 
 /**
  * Private @wordpress/block-editor APIs.
@@ -139,4 +140,5 @@ lock( privateApis, {
 	useListViewPanelState,
 	isHashLink,
 	isRelativePath,
+	BlockCardControlsFill,
 } );

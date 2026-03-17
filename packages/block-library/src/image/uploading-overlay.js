@@ -79,7 +79,10 @@ export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
 
 	return (
 		<div className="wp-block-image__upload-overlay">
-			<ProgressBar value={ progressValue } />
+			<ProgressBar
+				value={ progressValue }
+				aria-label={ __( 'Upload progress' ) }
+			/>
 			<span className="wp-block-image__upload-overlay-label">
 				{ getOperationLabel( currentOperation ) }
 				{ typeof progressValue === 'number' && ` ${ progressValue }%` }

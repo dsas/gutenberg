@@ -3,6 +3,7 @@
  */
 import { useSelect, useDispatch } from '@wordpress/data';
 import { ProgressBar, Button } from '@wordpress/components';
+import { useEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { store as uploadMediaStore } from '@wordpress/upload-media';
 
@@ -45,6 +46,23 @@ function getOperationLabel( operation ) {
  * @param {Function} props.onCancel     Callback when cancel button is clicked.
  */
 export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
+	const overlayRef = useRef();
+
+	// When the overlay unmounts, return focus to the block wrapper if focus
+	// was inside the overlay (e.g. on the Cancel button). This prevents
+	// focus from being lost to the document body.
+	useEffect( () => {
+		return () => {
+			const overlay = overlayRef.current;
+			if (
+				overlay &&
+				overlay.contains( overlay.ownerDocument.activeElement )
+			) {
+				overlay.closest( '[data-block]' )?.focus();
+			}
+		};
+	}, [] );
+
 	const { progress, currentOperation, itemId } = useSelect(
 		( select ) => {
 			const { getItemByBlobUrl, getItemByAttachmentId } = unlock(
@@ -78,7 +96,11 @@ export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
 		typeof progress === 'number' ? Math.round( progress ) : undefined;
 
 	return (
-		<div className="wp-block-image__upload-overlay" role="status">
+		<div
+			className="wp-block-image__upload-overlay"
+			role="status"
+			ref={ overlayRef }
+		>
 			<ProgressBar
 				value={ progressValue }
 				aria-label={ __( 'Upload progress' ) }

@@ -78,7 +78,7 @@ export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
 		typeof progress === 'number' ? Math.round( progress ) : undefined;
 
 	return (
-		<div className="wp-block-image__upload-overlay">
+		<div className="wp-block-image__upload-overlay" role="status">
 			<ProgressBar
 				value={ progressValue }
 				aria-label={ __( 'Upload progress' ) }

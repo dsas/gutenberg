@@ -1048,6 +1048,7 @@ export default function Image( {
 				<img
 					src={ temporaryURL || url }
 					alt={ defaultedAlt }
+					aria-busy={ !! temporaryURL || isSideloading }
 					onError={ onImageError }
 					onLoad={ onImageLoad }
 					ref={ setRefs }

@@ -29,10 +29,14 @@ export default function useUploadAnnouncer( url, isComplete, filename = '' ) {
 	const hasAnnouncedComplete = useRef( false );
 	const previousErrorRef = useRef( null );
 
-	const { itemError } = useSelect(
+	const { itemError, batchSize, batchIndex } = useSelect(
 		( select ) => {
 			if ( ! url ) {
-				return { itemError: undefined };
+				return {
+					itemError: undefined,
+					batchSize: undefined,
+					batchIndex: undefined,
+				};
 			}
 
 			const { getItemByBlobUrl } = unlock( select( uploadMediaStore ) );
@@ -40,47 +44,82 @@ export default function useUploadAnnouncer( url, isComplete, filename = '' ) {
 
 			return {
 				itemError: item?.error,
+				batchSize: item?.batchSize,
+				batchIndex: item?.batchIndex,
 			};
 		},
 		[ url ]
 	);
 
-	// Announce upload start
+	// Announce upload start.
+	// For batches, only the first item announces (with total count).
 	useEffect( () => {
 		if ( url && ! hasAnnouncedStart.current ) {
 			// Disable reason: Updating a ref is a standard React pattern for
 			// tracking state across renders without causing re-renders.
 			// eslint-disable-next-line react-compiler/react-compiler
 			hasAnnouncedStart.current = true;
-			const message = filename
-				? sprintf(
-						/* translators: %s: filename */
-						__( 'Uploading %s…' ),
-						filename
-				  )
-				: __( 'Uploading image…' );
+
+			// For batch uploads, only announce once from the first item.
+			if ( batchSize > 1 && batchIndex > 1 ) {
+				return;
+			}
+
+			let message;
+			if ( batchSize > 1 ) {
+				message = sprintf(
+					/* translators: %d: number of images being uploaded */
+					__( 'Uploading %d images…' ),
+					batchSize
+				);
+			} else if ( filename ) {
+				message = sprintf(
+					/* translators: %s: filename */
+					__( 'Uploading %s…' ),
+					filename
+				);
+			} else {
+				message = __( 'Uploading image…' );
+			}
 			speak( message, 'polite' );
 		}
-	}, [ url, filename ] );
+	}, [ url, filename, batchSize, batchIndex ] );
 
-	// Announce upload completion
+	// Announce upload completion.
+	// For batches, only announce when the batch is fully uploaded.
 	useEffect( () => {
 		if (
 			isComplete &&
 			hasAnnouncedStart.current &&
 			! hasAnnouncedComplete.current
 		) {
+			// For batch uploads, skip per-item completion announcements
+			// for non-lead items. The lead item (batchIndex === 1) will
+			// announce when the entire batch is done via isBatchUploaded.
+			if ( batchSize > 1 && batchIndex > 1 ) {
+				return;
+			}
+
 			hasAnnouncedComplete.current = true;
-			const message = filename
-				? sprintf(
-						/* translators: %s: filename */
-						__( '%s uploaded successfully.' ),
-						filename
-				  )
-				: __( 'Image uploaded successfully.' );
+			let message;
+			if ( batchSize > 1 ) {
+				message = sprintf(
+					/* translators: %d: number of images uploaded */
+					__( '%d images uploaded successfully.' ),
+					batchSize
+				);
+			} else if ( filename ) {
+				message = sprintf(
+					/* translators: %s: filename */
+					__( '%s uploaded successfully.' ),
+					filename
+				);
+			} else {
+				message = __( 'Image uploaded successfully.' );
+			}
 			speak( message, 'polite' );
 		}
-	}, [ isComplete, filename ] );
+	}, [ isComplete, filename, batchSize, batchIndex ] );
 
 	// Announce errors
 	useEffect( () => {

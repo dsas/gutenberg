@@ -252,6 +252,23 @@ export function getItemByBlobUrl(
 }
 
 /**
+ * Returns the number of child sideload items still in the queue for a parent item.
+ *
+ * Used to track thumbnail generation progress.
+ *
+ * @param state    Upload state.
+ * @param parentId Parent item ID.
+ *
+ * @return Number of child items remaining.
+ */
+export function getChildItemCount(
+	state: State,
+	parentId: QueueItemId
+): number {
+	return state.queue.filter( ( item ) => item.parentId === parentId ).length;
+}
+
+/**
  * Returns a queue item by matching an attachment ID.
  *
  * This is useful as a fallback when no blob URL is available,

@@ -4,7 +4,7 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { ProgressBar, Button } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { store as uploadMediaStore } from '@wordpress/upload-media';
 
 /**
@@ -18,7 +18,7 @@ import { unlock } from '../lock-unlock';
  * @param {string|undefined} operation The current operation type.
  * @return {string} The localized label for the operation.
  */
-function getOperationLabel( operation ) {
+export function getOperationLabel( operation ) {
 	switch ( operation ) {
 		case 'PREPARE':
 			return __( 'Preparing…' );
@@ -63,11 +63,21 @@ export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
 		};
 	}, [] );
 
-	const { progress, currentOperation, itemId } = useSelect(
+	const {
+		progress,
+		currentOperation,
+		itemId,
+		batchSize,
+		batchIndex,
+		thumbnailCount,
+		remainingThumbnails,
+	} = useSelect(
 		( select ) => {
-			const { getItemByBlobUrl, getItemByAttachmentId } = unlock(
-				select( uploadMediaStore )
-			);
+			const {
+				getItemByBlobUrl,
+				getItemByAttachmentId,
+				getChildItemCount,
+			} = unlock( select( uploadMediaStore ) );
 			const item =
 				( url && getItemByBlobUrl( url ) ) ||
 				( attachmentId && getItemByAttachmentId( attachmentId ) ) ||
@@ -77,6 +87,12 @@ export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
 				progress: item?.progress,
 				currentOperation: item?.currentOperation,
 				itemId: item?.id,
+				batchSize: item?.batchSize,
+				batchIndex: item?.batchIndex,
+				thumbnailCount: item?.thumbnailCount ?? 0,
+				remainingThumbnails: item?.id
+					? getChildItemCount( item.id )
+					: 0,
 			};
 		},
 		[ url, attachmentId ]
@@ -95,6 +111,26 @@ export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
 	const progressValue =
 		typeof progress === 'number' ? Math.round( progress ) : undefined;
 
+	let label;
+	if ( thumbnailCount > 0 && remainingThumbnails > 0 ) {
+		const current = thumbnailCount - remainingThumbnails + 1;
+		label = sprintf(
+			/* translators: 1: current subsize number, 2: total subsizes */
+			__( 'Generating subsize %1$d of %2$d' ),
+			current,
+			thumbnailCount
+		);
+	} else if ( batchSize > 1 ) {
+		label = sprintf(
+			/* translators: 1: current image number, 2: total images in batch */
+			__( 'Image %1$d of %2$d' ),
+			batchIndex,
+			batchSize
+		);
+	} else {
+		label = getOperationLabel( currentOperation );
+	}
+
 	return (
 		<div
 			className="wp-block-image__upload-overlay"
@@ -106,7 +142,7 @@ export default function UploadingOverlay( { url, attachmentId, onCancel } ) {
 				aria-label={ __( 'Upload progress' ) }
 			/>
 			<span className="wp-block-image__upload-overlay-label">
-				{ getOperationLabel( currentOperation ) }
+				{ label }
 				{ typeof progressValue === 'number' && ` ${ progressValue }%` }
 			</span>
 			<Button

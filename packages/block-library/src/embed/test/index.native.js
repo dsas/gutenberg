@@ -28,9 +28,9 @@ import { requestPreview } from '@wordpress/react-native-bridge';
 /**
  * Internal dependencies
  */
+import { WebView } from 'react-native-webview';
 import * as paragraph from '../../paragraph';
 import * as embed from '..';
-import { WebView } from 'react-native-webview';
 
 // Override modal mock to prevent unmounting it when is not visible.
 // This is required to be able to trigger onClose and onDismiss events when
@@ -1114,7 +1114,7 @@ describe( 'Embed block', () => {
 			try {
 				mediaSettingsPanel =
 					await screen.findByText( 'Media settings' );
-			} catch ( e ) {
+			} catch {
 				// NOOP.
 			}
 

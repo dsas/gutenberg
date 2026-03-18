@@ -240,10 +240,9 @@ test.describe( 'Cover', () => {
 			.click();
 
 		// Ensure there the default value for the minimum height of cover is undefined.
-		const defaultHeightValue = await coverBlockEditorSettings
-			.getByLabel( 'Minimum height' )
-			.inputValue();
-		expect( defaultHeightValue ).toBeFalsy();
+		await expect(
+			coverBlockEditorSettings.getByLabel( 'Minimum height' )
+		).toHaveValue( '' );
 
 		// There is no accessible locator for the draggable block resize edge,
 		// which is he bottom edge of the Cover block.
@@ -374,7 +373,7 @@ test.describe( 'Cover', () => {
 				trial: true,
 				timeout: 1000, // This test will always take 1 second to run.
 			} );
-		} catch ( error ) {
+		} catch {
 			isClickable = false;
 		}
 

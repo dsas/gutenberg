@@ -6,6 +6,10 @@
 
 -   `CustomGradientPicker`: Add state persistence when switching between Linear and Radial Gradient ([#76595](https://github.com/WordPress/gutenberg/pull/76595)).
 
+### Internal
+
+-   `Modal`, `Menu`: Use `--wpds-motion-*` design tokens for animation duration and easing ([#76097](https://github.com/WordPress/gutenberg/pull/76097)).
+
 ## 32.4.0 (2026-03-18)
 
 ### Bug Fixes

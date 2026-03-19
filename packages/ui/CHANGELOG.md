@@ -9,6 +9,7 @@
 ### Internal
 
 -   `Tabs`: Add development-mode validation for Tab/Panel count matching ([#75170](https://github.com/WordPress/gutenberg/pull/75170)).
+-   `Dialog`, dropdown motion utilities: Use `--wpds-motion-*` design tokens for animation duration and easing ([#76097](https://github.com/WordPress/gutenberg/pull/76097)).
 
 ## 0.9.0 (2026-03-18)
 

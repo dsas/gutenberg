@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Small spacing adjustments between title, subtitle and action elements in the header.
+- Small spacing adjustments between title, subtitle and action elements in the header. [#76683](https://github.com/WordPress/gutenberg/pull/76683)
 
 ## 1.10.0 (2026-03-18)
 

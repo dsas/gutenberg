@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Small spacing adjustments between title, subtitle and action elements in the header.
+
 ## 1.10.0 (2026-03-18)
 
 - Update Title and Breadcrumbs font sizes. [#76452](https://github.com/WordPress/gutenberg/pull/76452)

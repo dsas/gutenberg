@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from '@wordpress/element';
+import { Stack } from '../../stack';
 import * as Drawer from '../index';
 
 const meta: Meta< typeof Drawer.Root > = {
@@ -13,7 +14,6 @@ const meta: Meta< typeof Drawer.Root > = {
 		'Drawer.Description': Drawer.Description,
 		'Drawer.CloseIcon': Drawer.CloseIcon,
 		'Drawer.Action': Drawer.Action,
-		'Drawer.Footer': Drawer.Footer,
 	},
 	argTypes: {
 		modal: {
@@ -37,16 +37,16 @@ export const _Default: Story = {
 			<>
 				<Drawer.Trigger>Open Drawer</Drawer.Trigger>
 				<Drawer.Popup>
-					<Drawer.Header>
-						<Drawer.Title>Navigation</Drawer.Title>
-						<Drawer.CloseIcon />
-					</Drawer.Header>
-					<Drawer.Description>
-						Browse through the available sections below.
-					</Drawer.Description>
-					<Drawer.Footer>
+					<Stack gap="lg">
+						<Drawer.Header>
+							<Drawer.Title>Navigation</Drawer.Title>
+							<Drawer.CloseIcon />
+						</Drawer.Header>
+						<Drawer.Description>
+							Browse through the available sections below.
+						</Drawer.Description>
 						<Drawer.Action>Done</Drawer.Action>
-					</Drawer.Footer>
+					</Stack>
 				</Drawer.Popup>
 			</>
 		),
@@ -77,17 +77,17 @@ function AllSidesContent() {
 				>
 					<Drawer.Trigger>{ label }</Drawer.Trigger>
 					<Drawer.Popup>
-						<Drawer.Header>
-							<Drawer.Title>{ title }</Drawer.Title>
-							<Drawer.CloseIcon />
-						</Drawer.Header>
-						<Drawer.Description>
-							Slides in from the { label.toLowerCase() } edge.
-							Swipe to dismiss.
-						</Drawer.Description>
-						<Drawer.Footer>
+						<Stack gap="lg">
+							<Drawer.Header>
+								<Drawer.Title>{ title }</Drawer.Title>
+								<Drawer.CloseIcon />
+							</Drawer.Header>
+							<Drawer.Description>
+								Slides in from the { label.toLowerCase() } edge.
+								Swipe to dismiss.
+							</Drawer.Description>
 							<Drawer.Action>Close</Drawer.Action>
-						</Drawer.Footer>
+						</Stack>
 					</Drawer.Popup>
 				</Drawer.Root>
 			) ) }
@@ -114,17 +114,17 @@ function ControlledContent() {
 		>
 			<Drawer.Trigger>Open Controlled Drawer</Drawer.Trigger>
 			<Drawer.Popup>
-				<Drawer.Header>
-					<Drawer.Title>Controlled Drawer</Drawer.Title>
-					<Drawer.CloseIcon />
-				</Drawer.Header>
-				<Drawer.Description>
-					The open state is managed externally via <code>open</code>{ ' ' }
-					and <code>onOpenChange</code>.
-				</Drawer.Description>
-				<Drawer.Footer>
+				<Stack gap="lg">
+					<Drawer.Header>
+						<Drawer.Title>Controlled Drawer</Drawer.Title>
+						<Drawer.CloseIcon />
+					</Drawer.Header>
+					<Drawer.Description>
+						The open state is managed externally via{ ' ' }
+						<code>open</code> and <code>onOpenChange</code>.
+					</Drawer.Description>
 					<Drawer.Action>Close</Drawer.Action>
-				</Drawer.Footer>
+				</Stack>
 			</Drawer.Popup>
 		</Drawer.Root>
 	);
@@ -142,17 +142,17 @@ function NonModalContent() {
 		<Drawer.Root swipeDirection="right" modal={ false }>
 			<Drawer.Trigger>Open Non-Modal Drawer</Drawer.Trigger>
 			<Drawer.Popup>
-				<Drawer.Header>
-					<Drawer.Title>Non-Modal</Drawer.Title>
-					<Drawer.CloseIcon />
-				</Drawer.Header>
-				<Drawer.Description>
-					This drawer does not trap focus and allows interaction with
-					the rest of the page while open.
-				</Drawer.Description>
-				<Drawer.Footer>
+				<Stack gap="lg">
+					<Drawer.Header>
+						<Drawer.Title>Non-Modal</Drawer.Title>
+						<Drawer.CloseIcon />
+					</Drawer.Header>
+					<Drawer.Description>
+						This drawer does not trap focus and allows interaction
+						with the rest of the page while open.
+					</Drawer.Description>
 					<Drawer.Action>Close</Drawer.Action>
-				</Drawer.Footer>
+				</Stack>
 			</Drawer.Popup>
 		</Drawer.Root>
 	);
@@ -191,33 +191,38 @@ function MobileNavigationContent() {
 		<Drawer.Root>
 			<Drawer.Trigger>Open Menu</Drawer.Trigger>
 			<Drawer.Popup>
-				<Drawer.Header>
-					<Drawer.Title>Menu</Drawer.Title>
-					<Drawer.CloseIcon />
-				</Drawer.Header>
-				<Drawer.Description>Swipe down to dismiss.</Drawer.Description>
-				<nav>
-					<ul
-						style={ {
-							listStyle: 'none',
-							padding: 0,
-							margin: 0,
-							display: 'grid',
-							gap: '4px',
-						} }
-					>
-						{ navItems.map( ( item ) => (
-							<li key={ item }>
-								<button type="button" style={ navItemStyle }>
-									{ item }
-								</button>
-							</li>
-						) ) }
-					</ul>
-				</nav>
-				<Drawer.Footer>
+				<Stack gap="lg">
+					<Drawer.Header>
+						<Drawer.Title>Menu</Drawer.Title>
+						<Drawer.CloseIcon />
+					</Drawer.Header>
+					<Drawer.Description>
+						Swipe down to dismiss.
+					</Drawer.Description>
+					<nav>
+						<ul
+							style={ {
+								listStyle: 'none',
+								padding: 0,
+								margin: 0,
+								display: 'grid',
+								gap: '4px',
+							} }
+						>
+							{ navItems.map( ( item ) => (
+								<li key={ item }>
+									<button
+										type="button"
+										style={ navItemStyle }
+									>
+										{ item }
+									</button>
+								</li>
+							) ) }
+						</ul>
+					</nav>
 					<Drawer.Action>Close</Drawer.Action>
-				</Drawer.Footer>
+				</Stack>
 			</Drawer.Popup>
 		</Drawer.Root>
 	);
@@ -251,42 +256,43 @@ function ActionSheetContent() {
 		<Drawer.Root>
 			<Drawer.Trigger>Open Action Sheet</Drawer.Trigger>
 			<Drawer.Popup>
-				<Drawer.Header>
-					<Drawer.Title>Photo Options</Drawer.Title>
-					<Drawer.CloseIcon />
-				</Drawer.Header>
+				<Stack gap="lg">
+					<Drawer.Header>
+						<Drawer.Title>Photo Options</Drawer.Title>
+						<Drawer.CloseIcon />
+					</Drawer.Header>
 
-				<div
-					style={ {
-						borderRadius: '8px',
-						border: '1px solid var(--wpds-color-stroke-surface-neutral-weak)',
-						overflow: 'hidden',
-						marginBottom: '12px',
-					} }
-				>
-					<button style={ actionItemStyle }>Take Photo</button>
-					<button style={ actionItemStyle }>
-						Choose from Library
-					</button>
-					<button
+					<div
 						style={ {
-							...actionItemStyle,
-							borderBottom: 'none',
+							borderRadius: '8px',
+							border: '1px solid var(--wpds-color-stroke-surface-neutral-weak)',
+							overflow: 'hidden',
 						} }
 					>
-						Browse Files
-					</button>
-				</div>
+						<button style={ actionItemStyle }>Take Photo</button>
+						<button style={ actionItemStyle }>
+							Choose from Library
+						</button>
+						<button
+							style={ {
+								...actionItemStyle,
+								borderBottom: 'none',
+							} }
+						>
+							Browse Files
+						</button>
+					</div>
 
-				<Drawer.Action
-					variant="outline"
-					style={ {
-						width: '100%',
-						color: 'var(--wpds-color-fg-content-error)',
-					} }
-				>
-					Delete Photo
-				</Drawer.Action>
+					<Drawer.Action
+						variant="outline"
+						style={ {
+							width: '100%',
+							color: 'var(--wpds-color-fg-content-error)',
+						} }
+					>
+						Delete Photo
+					</Drawer.Action>
+				</Stack>
 			</Drawer.Popup>
 		</Drawer.Root>
 	);

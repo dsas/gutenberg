@@ -7,7 +7,13 @@ import type { ComponentProps } from '../utils/types';
 export interface RootProps
 	extends Pick<
 		_Drawer.Root.Props,
-		'open' | 'onOpenChange' | 'defaultOpen' | 'modal' | 'swipeDirection'
+		| 'open'
+		| 'onOpenChange'
+		| 'onOpenChangeComplete'
+		| 'defaultOpen'
+		| 'modal'
+		| 'swipeDirection'
+		| 'disablePointerDismissal'
 	> {
 	/**
 	 * The content to be rendered inside the component.
@@ -22,21 +28,30 @@ export interface TriggerProps extends ComponentProps< 'button' > {
 	children?: ReactNode;
 }
 
-export interface PopupProps extends ComponentProps< 'div' > {
+export interface PopupProps
+	extends ComponentProps< 'div' >,
+		Pick< _Drawer.Popup.Props, 'initialFocus' | 'finalFocus' > {
 	/**
 	 * The content to be rendered inside the component.
 	 */
 	children?: ReactNode;
+
+	/**
+	 * Controls the size of the drawer along its relevant axis (width for
+	 * left/right drawers, height for up/down drawers).
+	 *
+	 * When not specified, left/right drawers use a default medium width
+	 * and up/down drawers fit their content.
+	 *
+	 * - `'small'` — narrow/short.
+	 * - `'medium'` — moderate.
+	 * - `'large'` — wide/tall.
+	 * - `'stretch'` — fills available space, respecting the viewport inset.
+	 */
+	size?: 'small' | 'medium' | 'large' | 'stretch';
 }
 
 export interface ActionProps extends ComponentProps< typeof Button > {
-	/**
-	 * The content to be rendered inside the component.
-	 */
-	children?: ReactNode;
-}
-
-export interface FooterProps extends ComponentProps< 'div' > {
 	/**
 	 * The content to be rendered inside the component.
 	 */

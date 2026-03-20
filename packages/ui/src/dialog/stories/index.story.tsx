@@ -11,6 +11,7 @@ const meta: Meta< typeof Dialog.Root > = {
 		'Dialog.Popup': Dialog.Popup,
 		'Dialog.Header': Dialog.Header,
 		'Dialog.Title': Dialog.Title,
+		'Dialog.Description': Dialog.Description,
 		'Dialog.CloseIcon': Dialog.CloseIcon,
 		'Dialog.Action': Dialog.Action,
 		'Dialog.Footer': Dialog.Footer,

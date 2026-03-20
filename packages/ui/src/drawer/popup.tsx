@@ -18,7 +18,7 @@ const ThemeProvider: typeof ThemeProviderType =
  * Uses a portal to render outside the DOM hierarchy.
  */
 const Popup = forwardRef< HTMLDivElement, PopupProps >( function DrawerPopup(
-	{ className, children, ...props },
+	{ className, children, size, initialFocus, finalFocus, ...props },
 	ref
 ) {
 	const modal = useDrawerModal();
@@ -32,7 +32,13 @@ const Popup = forwardRef< HTMLDivElement, PopupProps >( function DrawerPopup(
 				<_Drawer.Viewport className={ styles.viewport }>
 					<_Drawer.Popup
 						ref={ ref }
-						className={ clsx( styles.popup, className ) }
+						className={ clsx(
+							styles.popup,
+							size && styles[ `is-${ size }` ],
+							className
+						) }
+						initialFocus={ initialFocus }
+						finalFocus={ finalFocus }
 						{ ...props }
 					>
 						<_Drawer.Content className={ styles.content }>

@@ -43,7 +43,6 @@ describe( 'Drawer', () => {
 		const titleRef = createRef< HTMLHeadingElement >();
 		const descriptionRef = createRef< HTMLParagraphElement >();
 		const closeIconRef = createRef< HTMLButtonElement >();
-		const footerRef = createRef< HTMLDivElement >();
 
 		render(
 			<Drawer.Root>
@@ -58,9 +57,7 @@ describe( 'Drawer', () => {
 					<Drawer.Description ref={ descriptionRef }>
 						A test description
 					</Drawer.Description>
-					<Drawer.Footer ref={ footerRef }>
-						<Drawer.Action ref={ actionRef }>Close</Drawer.Action>
-					</Drawer.Footer>
+					<Drawer.Action ref={ actionRef }>Close</Drawer.Action>
 				</Drawer.Popup>
 			</Drawer.Root>
 		);
@@ -78,7 +75,6 @@ describe( 'Drawer', () => {
 		expect( descriptionRef.current ).toBeInstanceOf( HTMLParagraphElement );
 		expect( closeIconRef.current ).toBeInstanceOf( HTMLButtonElement );
 		expect( actionRef.current ).toBeInstanceOf( HTMLButtonElement );
-		expect( footerRef.current ).toBeInstanceOf( HTMLDivElement );
 	} );
 
 	describe( 'Development mode validation', () => {
@@ -109,9 +105,7 @@ describe( 'Drawer', () => {
 								{ /* Missing Drawer.Title */ }
 							</Drawer.Header>
 							<p>Content without a title</p>
-							<Drawer.Footer>
-								<Drawer.Action>Close</Drawer.Action>
-							</Drawer.Footer>
+							<Drawer.Action>Close</Drawer.Action>
 						</Drawer.Popup>
 					</Drawer.Root>
 				</TestErrorBoundary>
@@ -145,9 +139,7 @@ describe( 'Drawer', () => {
 								<Drawer.Title>My Title</Drawer.Title>
 							</Drawer.Header>
 							<p>Content with a title</p>
-							<Drawer.Footer>
-								<Drawer.Action>Close</Drawer.Action>
-							</Drawer.Footer>
+							<Drawer.Action>Close</Drawer.Action>
 						</Drawer.Popup>
 					</Drawer.Root>
 				</TestErrorBoundary>
@@ -171,9 +163,7 @@ describe( 'Drawer', () => {
 								<Drawer.Title>My Title</Drawer.Title>
 							</Drawer.Header>
 							<p>Content with a title</p>
-							<Drawer.Footer>
-								<Drawer.Action>Close</Drawer.Action>
-							</Drawer.Footer>
+							<Drawer.Action>Close</Drawer.Action>
 						</Drawer.Popup>
 					</Drawer.Root>
 				</TestErrorBoundary>
@@ -205,9 +195,7 @@ describe( 'Drawer', () => {
 								</Drawer.Title>
 							</Drawer.Header>
 							<p>Content with empty title</p>
-							<Drawer.Footer>
-								<Drawer.Action>Close</Drawer.Action>
-							</Drawer.Footer>
+							<Drawer.Action>Close</Drawer.Action>
 						</Drawer.Popup>
 					</Drawer.Root>
 				</TestErrorBoundary>
@@ -241,9 +229,7 @@ describe( 'Drawer', () => {
 								<Drawer.Title> </Drawer.Title>
 							</Drawer.Header>
 							<p>Content with whitespace-only title</p>
-							<Drawer.Footer>
-								<Drawer.Action>Close</Drawer.Action>
-							</Drawer.Footer>
+							<Drawer.Action>Close</Drawer.Action>
 						</Drawer.Popup>
 					</Drawer.Root>
 				</TestErrorBoundary>
@@ -280,9 +266,7 @@ describe( 'Drawer', () => {
 								</Drawer.Title>
 							</Drawer.Header>
 							<p>Content with icon and text title</p>
-							<Drawer.Footer>
-								<Drawer.Action>Close</Drawer.Action>
-							</Drawer.Footer>
+							<Drawer.Action>Close</Drawer.Action>
 						</Drawer.Popup>
 					</Drawer.Root>
 				</TestErrorBoundary>

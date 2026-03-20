@@ -42,6 +42,8 @@
 	}
 
 	.popup {
+		--viewport-inset: var(--wpds-dimension-padding-2xl);
+
 		position: fixed;
 		z-index: var(--wp-ui-drawer-z-index, initial);
 		box-sizing: border-box;
@@ -58,6 +60,22 @@
 		overscroll-behavior: contain;
 		touch-action: auto;
 		will-change: transform;
+
+		&.is-small {
+			--popup-size: var(--wpds-dimension-surface-width-sm);
+		}
+
+		&.is-medium {
+			--popup-size: var(--wpds-dimension-surface-width-md);
+		}
+
+		&.is-large {
+			--popup-size: var(--wpds-dimension-surface-width-lg);
+		}
+
+		&.is-stretch {
+			--popup-size: var(--stretch-size);
+		}
 
 		&[data-swiping] {
 			user-select: none;
@@ -77,12 +95,14 @@
 
 		/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 		&[data-swipe-direction="left"] {
+			--stretch-size: calc(100vw - var(--viewport-inset));
+
 			top: 0;
 			bottom: 0;
 			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 			left: 0;
-			width: var(--wpds-dimension-surface-width-lg);
-			max-width: 100vw;
+			width: var(--popup-size, var(--wpds-dimension-surface-width-lg));
+			max-width: calc(100vw - var(--viewport-inset));
 			border-start-end-radius: var(--wpds-border-radius-lg);
 			border-end-end-radius: var(--wpds-border-radius-lg);
 			transform: translateX(var(--drawer-swipe-movement-x));
@@ -95,12 +115,14 @@
 
 		/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 		&[data-swipe-direction="right"] {
+			--stretch-size: calc(100vw - var(--viewport-inset));
+
 			top: 0;
 			bottom: 0;
 			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 			right: 0;
-			width: var(--wpds-dimension-surface-width-lg);
-			max-width: 100vw;
+			width: var(--popup-size, var(--wpds-dimension-surface-width-lg));
+			max-width: calc(100vw - var(--viewport-inset));
 			border-start-start-radius: var(--wpds-border-radius-lg);
 			border-end-start-radius: var(--wpds-border-radius-lg);
 			transform: translateX(var(--drawer-swipe-movement-x));
@@ -112,12 +134,15 @@
 		}
 
 		&[data-swipe-direction="down"] {
+			--stretch-size: calc(100dvh - var(--viewport-inset));
+
 			bottom: 0;
 			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 			left: 0;
 			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 			right: 0;
-			max-height: 100dvh;
+			height: var(--popup-size, auto);
+			max-height: calc(100dvh - var(--viewport-inset));
 			padding-bottom: env(safe-area-inset-bottom);
 			border-start-start-radius: var(--wpds-border-radius-lg);
 			border-start-end-radius: var(--wpds-border-radius-lg);
@@ -130,12 +155,15 @@
 		}
 
 		&[data-swipe-direction="up"] {
+			--stretch-size: calc(100dvh - var(--viewport-inset));
+
 			top: 0;
 			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 			left: 0;
 			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
 			right: 0;
-			max-height: 100dvh;
+			height: var(--popup-size, auto);
+			max-height: calc(100dvh - var(--viewport-inset));
 			border-end-start-radius: var(--wpds-border-radius-lg);
 			border-end-end-radius: var(--wpds-border-radius-lg);
 			transform: translateY(var(--drawer-swipe-movement-y));
@@ -148,10 +176,6 @@
 	}
 
 	.content {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		min-height: 0;
 		padding: var(--wpds-dimension-padding-2xl);
 	}
 
@@ -159,20 +183,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: var(--wpds-dimension-gap-lg);
 	}
 
 	.description {
-		margin-bottom: var(--wpds-dimension-gap-lg);
 		color: var(--wpds-color-fg-content-neutral-weak);
 	}
 
-	.footer {
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		gap: var(--wpds-dimension-gap-sm);
-		margin-top: auto;
-		padding-top: var(--wpds-dimension-padding-lg);
-	}
 }

@@ -6,7 +6,7 @@ import {
 	privateApis as themePrivateApis,
 } from '@wordpress/theme';
 import { unlock } from '../lock-unlock';
-import { DialogValidationProvider } from './context';
+import { DialogValidationProvider, useDialogModal } from './context';
 import styles from './style.module.css';
 import type { PopupProps } from './types';
 
@@ -21,9 +21,13 @@ const Popup = forwardRef< HTMLDivElement, PopupProps >( function DialogPopup(
 	{ className, size = 'medium', children, ...props },
 	ref
 ) {
+	const modal = useDialogModal();
+
 	return (
 		<_Dialog.Portal>
-			<_Dialog.Backdrop className={ styles.backdrop } />
+			{ modal === true && (
+				<_Dialog.Backdrop className={ styles.backdrop } />
+			) }
 			<ThemeProvider>
 				<_Dialog.Popup
 					ref={ ref }

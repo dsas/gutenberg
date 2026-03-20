@@ -4,6 +4,7 @@ export * as Card from './card';
 export * as Collapsible from './collapsible';
 export * as CollapsibleCard from './collapsible-card';
 export * as Dialog from './dialog';
+export * as Drawer from './drawer';
 export * from './form/primitives';
 export * from './icon';
 export * from './icon-button';

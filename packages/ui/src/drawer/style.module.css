@@ -1,0 +1,178 @@
+@layer wp-ui-utilities, wp-ui-components, wp-ui-compositions, wp-ui-overrides;
+
+@layer wp-ui-components {
+	.backdrop {
+		--backdrop-opacity: 0.35;
+		position: fixed;
+		inset: 0;
+		z-index: var(--wp-ui-drawer-z-index, initial);
+		min-height: 100dvh;
+		background-color: rgb(0, 0, 0);
+		opacity: calc(var(--backdrop-opacity) * (1 - var(--drawer-swipe-progress)));
+
+		/* iOS 26+: Ensure the backdrop covers the entire visible viewport. */
+		@supports (-webkit-touch-callout: none) {
+			position: absolute;
+		}
+
+		&[data-starting-style],
+		&[data-ending-style] {
+			opacity: 0;
+		}
+
+		@media not (prefers-reduced-motion) {
+			transition: opacity 450ms cubic-bezier(0.32, 0.72, 0, 1);
+
+			&[data-ending-style] {
+				pointer-events: none;
+				transition-duration: calc(var(--drawer-swipe-strength) * 400ms);
+			}
+
+			&[data-swiping] {
+				transition-duration: 0ms;
+			}
+		}
+	}
+
+	.viewport {
+		position: fixed;
+		inset: 0;
+		z-index: var(--wp-ui-drawer-z-index, initial);
+		pointer-events: none;
+	}
+
+	.popup {
+		position: fixed;
+		z-index: var(--wp-ui-drawer-z-index, initial);
+		box-sizing: border-box;
+		display: flex;
+		outline: 0;
+		pointer-events: auto;
+		background-color: var(--wpds-color-bg-surface-neutral-strong);
+		box-shadow: var(--wpds-elevation-lg);
+		font-family: var(--wpds-font-family-body);
+		font-size: var(--wpds-font-size-md);
+		line-height: var(--wpds-font-line-height-md);
+		color: var(--wpds-color-fg-content-neutral);
+		overflow-block: auto;
+		overscroll-behavior: contain;
+		touch-action: auto;
+		will-change: transform;
+
+		&[data-swiping] {
+			user-select: none;
+		}
+
+		@media not (prefers-reduced-motion) {
+			transition: transform 450ms cubic-bezier(0.32, 0.72, 0, 1);
+
+			&[data-ending-style] {
+				transition-duration: calc(var(--drawer-swipe-strength) * 400ms);
+			}
+
+			&[data-swiping] {
+				transition-duration: 0ms;
+			}
+		}
+
+		/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+		&[data-swipe-direction="left"] {
+			top: 0;
+			bottom: 0;
+			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+			left: 0;
+			width: var(--wpds-dimension-surface-width-lg);
+			max-width: 100vw;
+			border-start-end-radius: var(--wpds-border-radius-lg);
+			border-end-end-radius: var(--wpds-border-radius-lg);
+			transform: translateX(var(--drawer-swipe-movement-x));
+
+			&[data-starting-style],
+			&[data-ending-style] {
+				transform: translateX(-100%);
+			}
+		}
+
+		/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+		&[data-swipe-direction="right"] {
+			top: 0;
+			bottom: 0;
+			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+			right: 0;
+			width: var(--wpds-dimension-surface-width-lg);
+			max-width: 100vw;
+			border-start-start-radius: var(--wpds-border-radius-lg);
+			border-end-start-radius: var(--wpds-border-radius-lg);
+			transform: translateX(var(--drawer-swipe-movement-x));
+
+			&[data-starting-style],
+			&[data-ending-style] {
+				transform: translateX(100%);
+			}
+		}
+
+		&[data-swipe-direction="down"] {
+			bottom: 0;
+			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+			left: 0;
+			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+			right: 0;
+			max-height: 100dvh;
+			padding-bottom: env(safe-area-inset-bottom);
+			border-start-start-radius: var(--wpds-border-radius-lg);
+			border-start-end-radius: var(--wpds-border-radius-lg);
+			transform: translateY(var(--drawer-swipe-movement-y));
+
+			&[data-starting-style],
+			&[data-ending-style] {
+				transform: translateY(100%);
+			}
+		}
+
+		&[data-swipe-direction="up"] {
+			top: 0;
+			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+			left: 0;
+			/* stylelint-disable-next-line plugin/use-logical-properties-and-values -- Physical positioning needed for slide-in animation direction */
+			right: 0;
+			max-height: 100dvh;
+			border-end-start-radius: var(--wpds-border-radius-lg);
+			border-end-end-radius: var(--wpds-border-radius-lg);
+			transform: translateY(var(--drawer-swipe-movement-y));
+
+			&[data-starting-style],
+			&[data-ending-style] {
+				transform: translateY(-100%);
+			}
+		}
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 0;
+		padding: var(--wpds-dimension-padding-2xl);
+	}
+
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--wpds-dimension-gap-lg);
+	}
+
+	.description {
+		margin-bottom: var(--wpds-dimension-gap-lg);
+		color: var(--wpds-color-fg-content-neutral-weak);
+	}
+
+	.footer {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: var(--wpds-dimension-gap-sm);
+		margin-top: auto;
+		padding-top: var(--wpds-dimension-padding-lg);
+	}
+}

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from '@wordpress/element';
+import { useId, useState } from '@wordpress/element';
+import type { ComponentProps } from 'react';
 import { Stack } from '../../stack';
 import * as Drawer from '../index';
 
@@ -234,6 +235,130 @@ function MobileNavigationContent() {
  */
 export const MobileNavigation: Story = {
 	render: () => <MobileNavigationContent />,
+};
+
+const ALL_SIZES = [ 'small', 'medium', 'large', 'stretch' ] as const;
+
+function SizeSelector( {
+	value,
+	onChange,
+}: {
+	value: ComponentProps< typeof Drawer.Popup >[ 'size' ];
+	onChange: ( size: ComponentProps< typeof Drawer.Popup >[ 'size' ] ) => void;
+} ) {
+	const selectId = useId();
+	return (
+		<div style={ { display: 'flex', gap: 8, alignItems: 'center' } }>
+			<label htmlFor={ selectId }>Size</label>
+			<select
+				id={ selectId }
+				value={ value ?? '' }
+				onChange={ ( e ) =>
+					onChange(
+						( e.target.value || undefined ) as ComponentProps<
+							typeof Drawer.Popup
+						>[ 'size' ]
+					)
+				}
+			>
+				<option value="">default</option>
+				{ ALL_SIZES.map( ( s ) => (
+					<option key={ s } value={ s }>
+						{ s }
+					</option>
+				) ) }
+			</select>
+		</div>
+	);
+}
+
+function DirectionSelector( {
+	value,
+	onChange,
+}: {
+	value: ComponentProps< typeof Drawer.Root >[ 'swipeDirection' ];
+	onChange: (
+		dir: ComponentProps< typeof Drawer.Root >[ 'swipeDirection' ]
+	) => void;
+} ) {
+	const selectId = useId();
+	return (
+		<div style={ { display: 'flex', gap: 8, alignItems: 'center' } }>
+			<label htmlFor={ selectId }>Direction</label>
+			<select
+				id={ selectId }
+				value={ value }
+				onChange={ ( e ) =>
+					onChange(
+						e.target.value as ComponentProps<
+							typeof Drawer.Root
+						>[ 'swipeDirection' ]
+					)
+				}
+			>
+				{ ( [ 'left', 'right', 'down', 'up' ] as const ).map( ( d ) => (
+					<option key={ d } value={ d }>
+						{ d }
+					</option>
+				) ) }
+			</select>
+		</div>
+	);
+}
+
+function SizePlaygroundContent() {
+	const [ size, setSize ] =
+		useState< ComponentProps< typeof Drawer.Popup >[ 'size' ] >();
+	const [ direction, setDirection ] =
+		useState< ComponentProps< typeof Drawer.Root >[ 'swipeDirection' ] >(
+			'left'
+		);
+
+	return (
+		<Drawer.Root swipeDirection={ direction }>
+			<div
+				style={ {
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 16,
+					alignItems: 'start',
+				} }
+			>
+				<DirectionSelector
+					value={ direction }
+					onChange={ setDirection }
+				/>
+				<SizeSelector value={ size } onChange={ setSize } />
+				<Drawer.Trigger>Open Drawer</Drawer.Trigger>
+			</div>
+			<Drawer.Popup size={ size }>
+				<Stack gap="lg">
+					<Drawer.Header>
+						<Drawer.Title>Size Playground</Drawer.Title>
+						<Drawer.CloseIcon />
+					</Drawer.Header>
+					<SizeSelector value={ size } onChange={ setSize } />
+					<DirectionSelector
+						value={ direction }
+						onChange={ setDirection }
+					/>
+					<Drawer.Description>
+						Use the dropdowns to change the size and direction. Both
+						inside and outside controls stay in sync.
+					</Drawer.Description>
+					<Drawer.Action>Got it</Drawer.Action>
+				</Stack>
+			</Drawer.Popup>
+		</Drawer.Root>
+	);
+}
+
+/**
+ * Interactive playground to test the `size` prop across all swipe
+ * directions. Size controls the width (left/right) or height (up/down).
+ */
+export const SizePlayground: Story = {
+	render: () => <SizePlaygroundContent />,
 };
 
 const actionItemStyle: React.CSSProperties = {

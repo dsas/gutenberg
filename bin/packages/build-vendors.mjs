@@ -11,19 +11,22 @@ const VENDORS_DIR = path.join( BUILD_DIR, 'vendors' );
 
 const VENDOR_SCRIPTS = [
 	{
-		name: 'react',
-		global: 'React',
 		handle: 'react',
+		global: 'React',
+		entrypoint: 'react',
 	},
 	{
-		name: 'react-dom',
-		global: 'ReactDOM',
 		handle: 'react-dom',
+		global: 'ReactDOM',
+		contents: [
+			'export * from "react-dom";',
+			'export { createRoot, hydrateRoot } from "react-dom/client";',
+		].join( '\n' ),
 	},
 	{
-		name: 'react/jsx-runtime',
-		global: 'ReactJSXRuntime',
 		handle: 'react-jsx-runtime',
+		global: 'ReactJSXRuntime',
+		entrypoint: 'react/jsx-runtime',
 	},
 ];
 
@@ -38,7 +41,7 @@ const VENDOR_SCRIPTS = [
  * @return {Promise<void>} Promise that resolves when all builds are finished.
  */
 async function bundleVendorScript( config ) {
-	const { name, global, handle } = config;
+	const { handle, global, entrypoint, contents } = config;
 
 	// Plugin that externalizes the `react` package.
 	const reactExternalPlugin = {
@@ -68,8 +71,7 @@ async function bundleVendorScript( config ) {
 	await Promise.all(
 		[ false, true ].map( ( production ) => {
 			const outputFile = handle + ( production ? '.min.js' : '.js' );
-			return esbuild.build( {
-				entryPoints: [ name ],
+			const esbuildOptions = {
 				outfile: path.join( VENDORS_DIR, outputFile ),
 				bundle: true,
 				format: 'iife',
@@ -78,7 +80,19 @@ async function bundleVendorScript( config ) {
 				target: 'esnext', // Don't transpile, just bundle.
 				platform: 'browser',
 				plugins: [ reactExternalPlugin ],
-			} );
+			};
+
+			if ( entrypoint ) {
+				esbuildOptions.entryPoints = [ entrypoint ];
+			} else {
+				esbuildOptions.stdin = {
+					contents,
+					resolveDir: ROOT_DIR,
+					loader: 'js',
+				};
+			}
+
+			return esbuild.build( esbuildOptions );
 		} )
 	);
 }
@@ -95,11 +109,11 @@ async function buildVendors() {
 			await bundleVendorScript( vendorConfig );
 			const buildTime = Date.now() - startTime;
 			console.log(
-				`   ✔ Bundled vendor ${ vendorConfig.name } (${ buildTime }ms)`
+				`   ✔ Bundled vendor ${ vendorConfig.handle } (${ buildTime }ms)`
 			);
 		} catch ( error ) {
 			console.error(
-				`   ✘ Failed to bundle vendor ${ vendorConfig.name }: ${ error.message }`
+				`   ✘ Failed to bundle vendor ${ vendorConfig.handle }: ${ error.message }`
 			);
 		}
 	}

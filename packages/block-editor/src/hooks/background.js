@@ -132,6 +132,7 @@ export function BackgroundImagePanel( {
 	name,
 	setAttributes,
 	settings,
+	selectedState = 'default',
 } ) {
 	const { style, inheritedValue } = useSelect(
 		( select ) => {
@@ -161,11 +162,20 @@ export function BackgroundImagePanel( {
 		return null;
 	}
 
-	const onChange = ( newStyle ) => {
-		setAttributes( {
-			style: cleanEmptyObject( newStyle ),
-		} );
-	};
+	const isStateMode = selectedState && selectedState !== 'default';
+	const value = isStateMode ? style?.[ selectedState ] : style;
+	const onChange = isStateMode
+		? ( newStateStyle ) =>
+				setAttributes( {
+					style: cleanEmptyObject( {
+						...style,
+						[ selectedState ]: newStateStyle,
+					} ),
+				} )
+		: ( newStyle ) =>
+				setAttributes( {
+					style: cleanEmptyObject( newStyle ),
+				} );
 
 	const updatedSettings = {
 		...settings,
@@ -191,7 +201,7 @@ export function BackgroundImagePanel( {
 			settings={ updatedSettings }
 			onChange={ onChange }
 			defaultControls={ defaultControls }
-			value={ style }
+			value={ value }
 		/>
 	);
 }
